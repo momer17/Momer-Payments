@@ -5,7 +5,6 @@ import com.MPS.momer_payments_platform.Domain.Enums.AccountStatus;
 import com.MPS.momer_payments_platform.Domain.Enums.TransactionStatus;
 import com.MPS.momer_payments_platform.Domain.Transaction;
 import com.MPS.momer_payments_platform.Repo.AccountRepository;
-import com.MPS.momer_payments_platform.Repo.PayeeRepository;
 import com.MPS.momer_payments_platform.Repo.TransactionRepository;
 import com.MPS.momer_payments_platform.api.dto.Payment.CreatePaymentRequest;
 import com.MPS.momer_payments_platform.api.dto.Payment.PaymentResponse;

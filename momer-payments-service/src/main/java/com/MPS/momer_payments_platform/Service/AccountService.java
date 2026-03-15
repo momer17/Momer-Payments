@@ -23,7 +23,7 @@ public class AccountService {
         validateAccountDoesNotExist(createAccountRequest);
 
         Instant now = Instant.now();
-        Account account = buildAndSaveAccount(createAccountRequest,now);
+        Account account = buildAndSaveAccount(createAccountRequest);
 
         return buildAccountResponse(account);
     }

@@ -1,0 +1,15 @@
+$kind: http-request
+name: Create Account
+method: POST
+url: "{{baseUrl}}/api/v1/account"
+order: 1000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "accountNumber": "63088560",
+      "sortCode": "778520",
+      "accountName": "Mohammed Omer"
+    }

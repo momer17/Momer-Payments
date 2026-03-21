@@ -1,0 +1,16 @@
+$kind: http-request
+name: Update Payee
+method: PUT
+url: '{{baseUrl}}/api/v1/payee/{{accountUUID}}/name'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "ownerAccountID": "{{accountUUID}}",
+      "receiverAccountID": "{{payeeAccountUUID}}",
+      "updatedReceiverName": "Jane Updated"
+    }

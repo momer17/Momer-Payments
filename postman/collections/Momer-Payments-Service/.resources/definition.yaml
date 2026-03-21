@@ -1,0 +1,10 @@
+$kind: collection
+name: Momer Payments Service
+description: REST API collection for the Momer Payments Service — covers Accounts, Payees, and Payments endpoints.
+variables:
+  - key: baseUrl
+    value: 'http://localhost:8080'
+  - key: accountUUID
+    value: ''
+  - key: payeeAccountUUID
+    value: ''

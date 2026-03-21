@@ -1,0 +1,20 @@
+$kind: http-request
+name: Create Payment
+method: POST
+url: "{{baseUrl}}/api/v1/payments"
+order: 1000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "senderAccountId": "{{accountUUID}}",
+      "receiverAccountNumber": "12345678",
+      "receiverSortCode": "123456",
+      "receiverName": "John Doe",
+      "currency": "GBP",
+      "amount": -1,
+      "idempotencyKey": "{{$randomUUID}}",
+      "paymentDescription": "Payment for services"
+    }

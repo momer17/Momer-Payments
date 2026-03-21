@@ -1,0 +1,7 @@
+$kind: http-request
+name: Get Transaction Details
+method: GET
+url: "{{baseUrl}}/api/v1/payments/transactions/details/{{transactionId}}"
+order: 1400
+headers:
+  Content-Type: application/json

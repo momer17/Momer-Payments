@@ -1,0 +1,5 @@
+$kind: http-request
+name: Delete Payee
+method: DELETE
+url: '{{baseUrl}}/api/v1/payee/{{ownerAccountUUID}}/{{receiverAccountUUID}}'
+order: 4000

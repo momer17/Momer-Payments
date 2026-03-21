@@ -1,0 +1,5 @@
+$kind: http-request
+name: Close Account
+method: Patch
+url: '{{baseUrl}}/api/v1/account/{{accountUUID}}'
+order: 4000

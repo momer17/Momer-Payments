@@ -1,0 +1,16 @@
+$kind: http-request
+name: Create Payee
+method: POST
+url: "{{baseUrl}}/api/v1/payee"
+order: 1000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "ownerAccountId": "{{accountUUID}}",
+      "displayName": "John Doe",
+      "receiverAccountNumber": "12345678",
+      "receiverSortCode": "123456"
+    }

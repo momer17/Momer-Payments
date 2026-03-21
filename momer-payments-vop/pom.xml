@@ -90,7 +90,11 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
@@ -118,6 +122,15 @@
 					</excludes>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <configuration>
+                    <url>jdbc:postgresql://localhost:5432/payment_db</url>
+                    <user>payment_user</user>
+                    <password>payment_pass</password>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 

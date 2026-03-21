@@ -1,7 +1,7 @@
 package com.MPS.momer_payments_platform.api.dto.Payment;
 
-import com.MPS.momer_payments_platform.Domain.Enums.Currency;
-import com.MPS.momer_payments_platform.Domain.Enums.TransactionStatus;
+import com.MPS.momer_payments_platform.domain.Enums.Currency;
+import com.MPS.momer_payments_platform.domain.Enums.TransactionStatus;
 
 import java.math.BigDecimal;
 import java.time.Instant;

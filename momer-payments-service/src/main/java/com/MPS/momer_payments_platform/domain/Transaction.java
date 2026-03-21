@@ -1,7 +1,7 @@
-package com.MPS.momer_payments_platform.Domain;
+package com.MPS.momer_payments_platform.domain;
 
-import com.MPS.momer_payments_platform.Domain.Enums.TransactionStatus;
-import com.MPS.momer_payments_platform.Domain.Enums.Currency;
+import com.MPS.momer_payments_platform.domain.Enums.TransactionStatus;
+import com.MPS.momer_payments_platform.domain.Enums.Currency;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,7 +23,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID transactionId;
 
-    private UUID idempotencyKey;
+    private String idempotencyKey;
 
     private String paymentReferenceNumber;
 

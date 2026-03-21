@@ -8,17 +8,16 @@ CREATE TABLE verification_record (
     receiver_sort_code      VARCHAR(255) NOT NULL,
     requested_name          VARCHAR(255) NOT NULL,
     actual_name             VARCHAR(255) NOT NULL,
-    levenshtein_distance    INTEGER NOT NULL,
     match_result            VARCHAR(50) NOT NULL CHECK (match_result IN ('EXACT_MATCH', 'CLOSE_MATCH', 'NO_MATCH')),
-    confidence_score        DECIMAL(5,4),
-    created_at              TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    confidence              DOUBLE PRECISION CHECK (confidence >= 0 AND confidence <= 1),
+    verified_at             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX idx_verification_record_sender_account_number
     ON verification_record (sender_account_number);
 
-CREATE INDEX idx_verification_record_receiver_account_number
+CREATE INDEX idx_verification_record_sender_account_number
     ON verification_record (receiver_account_number);
 
 CREATE INDEX idx_verification_record_created_at
-    ON verification_record (created_at);
+    ON verification_record (verified_at);

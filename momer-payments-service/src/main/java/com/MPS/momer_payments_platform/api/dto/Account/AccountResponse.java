@@ -1,8 +1,7 @@
 package com.MPS.momer_payments_platform.api.dto.Account;
 
-import com.MPS.momer_payments_platform.Domain.Enums.AccountStatus;
+import com.MPS.momer_payments_platform.domain.Enums.AccountStatus;
 
-M
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;

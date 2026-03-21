@@ -1,6 +1,6 @@
-package com.MPS.momer_payments_platform.Domain;
+package com.MPS.momer_payments_platform.domain;
 
-import com.MPS.momer_payments_platform.Domain.Enums.AccountStatus;
+import com.MPS.momer_payments_platform.domain.Enums.AccountStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,22 +24,27 @@ public class Account {
 
     private String accountNumber;
 
-    private String sortCode;
-
     private String accountName;
+
+    private String sortCode;
 
     private BigDecimal accountBalance;
 
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
-    @OneToMany(mappedBy = "ownerAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ownerAccount", fetch = FetchType.LAZY)
     private List<Payees> payees;
 
     private Instant createdDate;
 
     private Instant updatedDate;
 
+
+
 }
+
+
+
 
 

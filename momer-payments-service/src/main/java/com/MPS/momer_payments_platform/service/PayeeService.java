@@ -1,11 +1,11 @@
-package com.MPS.momer_payments_platform.Service;
+package com.MPS.momer_payments_platform.service;
 
-import com.MPS.momer_payments_platform.Domain.Account;
-import com.MPS.momer_payments_platform.Domain.Enums.AccountStatus;
-import com.MPS.momer_payments_platform.Domain.Enums.MatchResult;
-import com.MPS.momer_payments_platform.Domain.Payees;
-import com.MPS.momer_payments_platform.Repo.AccountRepository;
-import com.MPS.momer_payments_platform.Repo.PayeeRepository;
+import com.MPS.momer_payments_platform.domain.Account;
+import com.MPS.momer_payments_platform.domain.Enums.AccountStatus;
+import com.MPS.momer_payments_platform.domain.Enums.MatchResult;
+import com.MPS.momer_payments_platform.domain.Payees;
+import com.MPS.momer_payments_platform.repository.AccountRepository;
+import com.MPS.momer_payments_platform.repository.PayeeRepository;
 import com.MPS.momer_payments_platform.api.dto.Payees.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -52,9 +52,8 @@ public class PayeeService {
         Instant now = Instant.now();
 
         Payees payee  = buildAndSavePayees(owner,receiver,mockResult,now);
-        payeeRepo.save(payee);
 
-        return buildPayeeResponse(payee);
+        return mapToPayeeResponse(payee);
     }
     @Transactional
     public PayeeResponse updatePayeeDisplayName(UpdatePayeeRequest updatePayeeRequest){
@@ -63,13 +62,13 @@ public class PayeeService {
         updatedPayee.setDisplayName(updatePayeeRequest.updatedReceiverName());
         payeeRepo.save(updatedPayee);
 
-        return buildPayeeResponse(updatedPayee);
+        return mapToPayeeResponse(updatedPayee);
     }
-    public void deletePayee(DeletePayeeRequest deletePayeeRequest){
-        Payees payee = getOwnerPayeeOrThrow(deletePayeeRequest.ownerAccountID(),deletePayeeRequest.receiverAccountID());
+    public void deletePayee(UUID ownerAccountId, UUID receiverAccountId){
+        Payees payee = getOwnerPayeeOrThrow(ownerAccountId,receiverAccountId);
         payeeRepo.delete(payee);
     }
-    private PayeeResponse buildPayeeResponse(Payees payee) {
+    private PayeeResponse mapToPayeeResponse(Payees payee) {
         return new PayeeResponse(
                 payee.getPayeeId(),
                 payee.getOwnerAccount().getAccountId(),
@@ -91,13 +90,13 @@ public class PayeeService {
 
 
         Payees payees = Payees.builder()
-                .payeeId(owner.getAccountId())
                 .ownerAccount(owner)
                 .receiverAccount(receiver)
                 .matchResult(MatchResult.valueOf(vopResult.matchResult))
                 .confidenceScore(vopResult.confidenceScore)
                 .verifiedName(vopResult.actualName())
                 .verifiedAt(now)
+                .displayName(receiver.getAccountName())
                 .build();
 
         return payeeRepo.save(payees);
@@ -108,7 +107,7 @@ public class PayeeService {
                 .orElseThrow(() -> new IllegalArgumentException("Owner account does not exist cannot link"));
     }
     public Payees getOwnerPayeeOrThrow(UUID ownerAccountId,UUID receiverAccountId) {
-        return payeeRepo.findByOwnerAccountIdAndReceiverAccountId(ownerAccountId,receiverAccountId)
+        return payeeRepo.findByOwnerAccountAccountIdAndReceiverAccountAccountId(ownerAccountId,receiverAccountId)
                 .orElseThrow(() -> new IllegalArgumentException("Payee contact does not exist cannot link"));
     }
     public Account getReceiverAccountOrThrow(String accountNumber, String sortCode) {
@@ -120,8 +119,11 @@ public class PayeeService {
             throw new IllegalArgumentException(role + " account not active. Payee cannot be created");
         }
     }
-    public List<Payees> getAllPayeesByOwnerAccountId(UUID ownerAccountId){
-        return payeeRepo.findAllByOwnerAccountId(ownerAccountId);
+    public List<PayeeResponse> getAllPayeesByOwnerAccountId(UUID ownerAccountId){
+        List<Payees> payees = payeeRepo.findAllByOwnerAccountAccountId(ownerAccountId);
+        return payees.stream()
+                .map(this::mapToPayeeResponse)
+                .toList();
     }
 
 

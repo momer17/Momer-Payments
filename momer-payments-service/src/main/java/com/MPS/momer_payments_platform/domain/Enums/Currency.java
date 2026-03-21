@@ -1,4 +1,4 @@
-package com.MPS.momer_payments_platform.Domain.Enums;
+package com.MPS.momer_payments_platform.domain.Enums;
 
 public enum Currency {
     //TODO: Ensure currency is set when creating payemnt

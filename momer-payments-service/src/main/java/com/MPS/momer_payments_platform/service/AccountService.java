@@ -1,12 +1,17 @@
-package com.MPS.momer_payments_platform.Service;
+package com.MPS.momer_payments_platform.service;
 
-import com.MPS.momer_payments_platform.Domain.Account;
-import com.MPS.momer_payments_platform.Repo.AccountRepository;
-import com.MPS.momer_payments_platform.api.dto.Account.*;
+import com.MPS.momer_payments_platform.domain.Account;
+import com.MPS.momer_payments_platform.domain.Enums.AccountStatus;
+import com.MPS.momer_payments_platform.repository.AccountRepository;
+import com.MPS.momer_payments_platform.api.dto.Account.AccountResponse;
+import com.MPS.momer_payments_platform.api.dto.Account.CreateAccountRequest;
+import com.MPS.momer_payments_platform.api.dto.Account.UpdateAccountRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,30 +25,40 @@ public class AccountService {
     @Transactional
     public AccountResponse createAccount(CreateAccountRequest createAccountRequest){
 
-        validateAccountDoesNotExist(createAccountRequest);
-
+        validateAccountDoesNotExistOrThrow(createAccountRequest);
         Instant now = Instant.now();
         Account account = buildAndSaveAccount(createAccountRequest);
-
-        return buildAccountResponse(account);
+        return mapToAccountResponse(account);
     }
     @Transactional
     public AccountResponse updateAccountDisplayName(UpdateAccountRequest updateAccountRequest){
 
-
         Account updatedAccount = getAccountOrThrow(updateAccountRequest.ownerAccountID());
         updatedAccount.setAccountName(updateAccountRequest.accountName());
         updatedAccount.setUpdatedDate(Instant.now());
-
         accountRepo.save(updatedAccount);
 
-        return buildAccountResponse(updatedAccount);
+        return mapToAccountResponse(updatedAccount);
     }
-    public void deleteAccount(DeleteAccountRequest deleteAccountRequest){
-        Account Account = getAccountOrThrow(deleteAccountRequest.ownerAccountID());
-        accountRepo.delete(Account);
+    @Transactional
+    public AccountResponse fundAccount(UUID accountId, BigDecimal amount) {
+        Account account = accountRepo.findByIdWithLock(accountId)
+                .orElseThrow(() -> new IllegalArgumentException("That account does not exist"));
+        account.setAccountBalance(account.getAccountBalance().add(amount));
+        accountRepo.save(account);
+
+        return mapToAccountResponse(account);
     }
-    private AccountResponse buildAccountResponse(Account Account) {
+
+
+    @Transactional
+    public AccountResponse closeAccount(UUID accountId){
+        Account account = getAccountOrThrow(accountId);
+        account.setAccountStatus(AccountStatus.CLOSED);
+        accountRepo.save(account);
+        return mapToAccountResponse(account);
+    }
+    private AccountResponse mapToAccountResponse(Account Account) {
         return new AccountResponse(
                 Account.getAccountId(),
                 Account.getAccountNumber(),
@@ -53,11 +68,8 @@ public class AccountService {
                 Account.getAccountStatus(),
                 Account.getCreatedDate(),
                 Account.getUpdatedDate()
-
         );
     }
-
-
 
 
     private Account buildAndSaveAccount(CreateAccountRequest accountRequest) {
@@ -66,8 +78,11 @@ public class AccountService {
                 .accountName(accountRequest.accountName())
                 .accountNumber(accountRequest.accountNumber())
                 .sortCode(accountRequest.sortCode())
+                .accountBalance(BigDecimal.ZERO)
+                .accountStatus(AccountStatus.ACTIVE)
+                .createdDate(Instant.now())
+                .updatedDate(Instant.now())
                 .build();
-
         return accountRepo.save(account);
     }
 
@@ -76,12 +91,18 @@ public class AccountService {
                 .orElseThrow(() -> new IllegalArgumentException("Owner account does not exist cannot link"));
     }
 
-    public void validateAccountDoesNotExist(CreateAccountRequest accountRequest) {
+    public void validateAccountDoesNotExistOrThrow(CreateAccountRequest accountRequest) {
         if (accountRepo.existsByAccountNumberAndSortCode(accountRequest.accountNumber(), accountRequest.sortCode())) {
             throw new IllegalArgumentException("Account already exists and cannot be created again");
         }
     }
 
+    public List<AccountResponse> getAllAccounts() {
+        List<Account> accounts = accountRepo.findAll();
+        return accounts.stream()
+                .map(this::mapToAccountResponse)
+                .toList();
+    }
 
 }
 

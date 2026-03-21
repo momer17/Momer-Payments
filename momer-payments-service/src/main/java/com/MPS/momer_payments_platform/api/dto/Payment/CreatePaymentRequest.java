@@ -1,6 +1,6 @@
 package com.MPS.momer_payments_platform.api.dto.Payment;
 
-import com.MPS.momer_payments_platform.Domain.Enums.Currency;
+import com.MPS.momer_payments_platform.domain.Enums.Currency;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
@@ -11,8 +11,8 @@ public record CreatePaymentRequest(
         @NotBlank @Size(min = 8, max = 8) String receiverAccountNumber,
         @NotBlank @Pattern(regexp = "\\d{2}-\\d{2}-\\d{2}") String receiverSortCode,
         @NotBlank String receiverName,
-        @NotBlank Currency currency,
+        @NotNull Currency currency,
         @NotNull @DecimalMin(value = "0.01") BigDecimal amount,
-        @NotBlank UUID idempotencyKey,
+        @NotBlank String idempotencyKey,
         @NotBlank String paymentDescription
 ){}

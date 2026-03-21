@@ -19,9 +19,9 @@ CREATE TABLE payees (
 
 -- Index for fast lookups of a user's payees
 CREATE INDEX idx_payee_owner_account_id
-    ON payee (owner_account_id);
+    ON payees (owner_account_id);
 
 -- Composite index
 CREATE INDEX idx_payee_owner_receiver
-    ON payee (owner_account_id, receiver_account_id);
+    ON payees (owner_account_id, receiver_account_id);
 

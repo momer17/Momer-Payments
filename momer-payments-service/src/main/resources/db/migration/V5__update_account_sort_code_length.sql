@@ -1,0 +1,1 @@
+ALTER TABLE accounts ALTER COLUMN sort_code TYPE VARCHAR(8);

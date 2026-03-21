@@ -1,6 +1,6 @@
-package com.MPS.momer_payments_platform.Domain;
+package com.MPS.momer_payments_platform.domain;
 
-import com.MPS.momer_payments_platform.Domain.Enums.MatchResult;
+import com.MPS.momer_payments_platform.domain.Enums.MatchResult;
 import jakarta.persistence.*;
 import lombok.*;
 

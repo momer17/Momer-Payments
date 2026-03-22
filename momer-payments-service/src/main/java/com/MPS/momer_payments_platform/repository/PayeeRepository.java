@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface PayeeRepository extends JpaRepository<Payees, UUID> {
     Optional<Payees> findByOwnerAccountAccountIdAndReceiverAccountAccountId(UUID ownerId, UUID receiverId);
     List<Payees> findAllByOwnerAccountAccountId(UUID ownerAccountId);
-
+    Optional<Payees> findByCorrelationId(String correlationId);
 }

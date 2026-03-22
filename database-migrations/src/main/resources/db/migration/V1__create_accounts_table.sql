@@ -13,11 +13,11 @@ CREATE TABLE accounts(
 );
 
 -- Indexes for fast lookups
-CREATE UNIQUE INDEX idx_accounts_account_number
+CREATE UNIQUE INDEX IF NOT EXISTS idx_accounts_account_number
     ON accounts(account_number);
 
-CREATE INDEX idx_accounts_sort_code_account_number
+CREATE INDEX IF NOT EXISTS idx_accounts_sort_code_account_number
     ON accounts(sort_code, account_number);
 
-CREATE INDEX idx_accounts_status
+CREATE INDEX IF NOT EXISTS idx_accounts_status
     ON accounts(account_status);

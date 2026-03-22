@@ -1,0 +1,1 @@
+ALTER TABLE payees ADD COLUMN verification_status VARCHAR(50) NOT NULL DEFAULT 'PENDING' CHECK (verification_status IN ('PENDING', 'VERIFIED', 'FAILED'));

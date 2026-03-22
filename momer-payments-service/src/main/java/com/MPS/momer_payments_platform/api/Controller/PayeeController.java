@@ -19,9 +19,9 @@ public class PayeeController {
     public PayeeController(PayeeService payeeService) {this.payeeService = payeeService;
     }
 
-    @PostMapping
-    public ResponseEntity<PayeeResponse> createPayee(@Valid @RequestBody CreatePayeeRequest payeeRequest){
-        return ResponseEntity.ok(payeeService.createPayee(payeeRequest));
+    @PostMapping //Currently will use polling for updates
+    public ResponseEntity<PayeeResponse> createPayeeVerificationPending(@Valid @RequestBody CreatePayeeRequest payeeRequest){
+        return ResponseEntity.ok(payeeService.createPayeeVerificationPending(payeeRequest));
     }
 
     @PutMapping("/{accountId}/name")

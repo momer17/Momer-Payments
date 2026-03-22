@@ -1,8 +1,8 @@
 package com.MPS.momer_payments_platform.api.dto.Payees;
 
 import com.MPS.momer_payments_platform.domain.Enums.MatchResult;
+import com.MPS.momer_payments_platform.domain.Enums.VerificationStatus;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -13,8 +13,11 @@ public record PayeeResponse(
         String receiverAccountNumber,
         String receiverSortCode,
         MatchResult matchResult,
-        BigDecimal confidenceScore,
+        String correlationId,
+        VerificationStatus verificationStatus,
+        double confidenceScore,
         String displayName,
         String verifiedName,
         Instant verifiedAt
+
 ) {}

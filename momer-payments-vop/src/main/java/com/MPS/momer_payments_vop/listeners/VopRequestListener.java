@@ -21,9 +21,13 @@ public class VopRequestListener {
 
     @RabbitListener(queues = RabbitMQConfig.VOP_VERIFICATION_REQUESTS_QUEUE)
     public void handleMatchRequest(VopRequestEvent vopRequestEvent) {
-        log.info("Received VoP match request for: {}", vopRequestEvent.requestedName());
-        log.info("And : {}", vopRequestEvent.actualName());
-
-        vopService.processMatchRequest(vopRequestEvent);
+        try {
+            log.info("Received request for: {}", vopRequestEvent.toString());
+            vopService.processMatchRequest(vopRequestEvent);
+            log.info("Successfully processed request");
+        } catch (Exception e) {
+            log.error("Error processing VOP request", e);
+            throw e; // Re-throw to let RabbitMQ handle retry
+        }
     }
 }

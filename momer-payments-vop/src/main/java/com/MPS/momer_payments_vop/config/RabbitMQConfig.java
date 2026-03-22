@@ -23,10 +23,10 @@ public class RabbitMQConfig {
 
     public static final String topicExchangeName = "momer.exchange";
     public static final String VOP_VERIFICATION_REQUESTS_QUEUE = "vop.verification-requests";
-    public static final String VOP_VERIFICATION_COMPLETED_QUEUE = "vop.verification-completed";
+    public static final String VOP_VERIFICATION_RESULT_QUEUE = "vop.verification-result";
 
-    public static final String RK_VERIFICATION_MATCH_REQUESTED = "verification.match.requested";
-    public static final String RK_VERIFICATION_MATCH_COMPLETED = "verification.match.completed";
+    public static final String RK_VERIFICATION_MATCH_RESULT = "vop.match.result";
+    public static final String RK_VERIFICATION_MATCH_REQUESTED = "vop.match.requested";
 
 
     @Bean
@@ -42,7 +42,7 @@ public class RabbitMQConfig {
 
     @Bean
     Queue vopVerificationCompletedQueue(){
-        return new Queue(VOP_VERIFICATION_COMPLETED_QUEUE,true);
+        return new Queue(VOP_VERIFICATION_RESULT_QUEUE,true);
     }
 
 
@@ -53,11 +53,11 @@ public class RabbitMQConfig {
 
     @Bean
     Binding vopVerificationRequestedBinding(TopicExchange exchange){
-        return BindingBuilder.bind(vopVerificationRequestedQueue()).to(exchange).with("momer-exchange");
+        return BindingBuilder.bind(vopVerificationRequestedQueue()).to(exchange).with(RK_VERIFICATION_MATCH_REQUESTED);
     }
     @Bean
     Binding vopVerificationCompletedBinding(TopicExchange exchange){
-        return BindingBuilder.bind(vopVerificationCompletedQueue()).to(exchange).with("momer-exchange");
+        return BindingBuilder.bind(vopVerificationCompletedQueue()).to(exchange).with(RK_VERIFICATION_MATCH_RESULT);
     }
 
     @Bean

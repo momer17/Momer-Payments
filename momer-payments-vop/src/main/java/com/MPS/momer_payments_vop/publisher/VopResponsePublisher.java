@@ -2,7 +2,6 @@ package com.MPS.momer_payments_vop.publisher;
 
 import com.MPS.momer_payments_vop.config.RabbitMQConfig;
 import com.MPS.momer_payments_vop.events.VopResponseEvent;
-import com.MPS.momer_payments_vop.listeners.VopRequestListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -18,12 +17,17 @@ public class VopResponsePublisher {
     }
 
     public void publishMatchCompleted(VopResponseEvent vopResponseEvent){
-        rabbitTemplate.convertAndSend(RabbitMQConfig.topicExchangeName,
-                RabbitMQConfig.RK_VERIFICATION_MATCH_COMPLETED,
-                vopResponseEvent);
-        log.info("Vop Match Completed: {}", vopResponseEvent.MatchResult());
-        log.info("Confidence score: {}", vopResponseEvent.confidenceScore());
+        try {
 
+            rabbitTemplate.convertAndSend(RabbitMQConfig.topicExchangeName,
+                    RabbitMQConfig.RK_VERIFICATION_MATCH_RESULT,
+                    vopResponseEvent);
+            log.info("Vop Match Completed: {}", vopResponseEvent.MatchResult());
+            log.info("Confidence score: {}", vopResponseEvent.confidenceScore());
+            }catch (Exception e){
+                log.error("Error processing VOP request", e);
+                throw e; // Re-throw to let RabbitMQ handle retry
+            }
     }
 
 

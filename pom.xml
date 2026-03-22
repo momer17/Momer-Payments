@@ -21,6 +21,7 @@
     </properties>
 
     <modules>
+        <module>database-migrations</module>
         <module>momer-payments-service</module>
         <module>momer-payments-vop</module>
         <module>momer-payments-orchestrator</module>

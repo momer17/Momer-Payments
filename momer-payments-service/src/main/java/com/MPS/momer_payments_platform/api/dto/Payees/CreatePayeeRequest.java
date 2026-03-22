@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public record CreatePayeeRequest(
         @NotNull UUID ownerAccountId,
-        @NotBlank String displayName,
+        @NotBlank String requestedName,
         @NotBlank @Size(min = 8, max = 8) String receiverAccountNumber,
         @NotBlank @Pattern(regexp = "\\d{2}-\\d{2}-\\d{2}") String receiverSortCode
 ) {}

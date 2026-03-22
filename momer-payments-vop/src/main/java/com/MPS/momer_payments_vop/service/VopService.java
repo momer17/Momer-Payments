@@ -37,6 +37,7 @@ public class VopService {
                 vopRequestEvent.requestedName(),
                 vopRequestEvent.actualName(),
                 matchResult.matchResult().toString(),
+                vopRequestEvent.correlationId(),
                 matchResult.confidence(),
                 Instant.now()
         );

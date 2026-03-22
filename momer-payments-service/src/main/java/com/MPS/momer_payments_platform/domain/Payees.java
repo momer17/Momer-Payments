@@ -1,6 +1,7 @@
 package com.MPS.momer_payments_platform.domain;
 
 import com.MPS.momer_payments_platform.domain.Enums.MatchResult;
+import com.MPS.momer_payments_platform.domain.Enums.VerificationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,11 +33,26 @@ public class Payees {
     @Enumerated(EnumType.STRING)
     private MatchResult matchResult;
 
-    private BigDecimal confidenceScore;
+    @Column(nullable = false)
+    private String correlationId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private VerificationStatus verificationStatus;
+
+    private double confidenceScore;
 
     private String displayName;
 
     private String verifiedName;
 
     private Instant verifiedAt;
+
+
+    @PrePersist
+    public void initExternalId() {
+        if (correlationId == null) {
+            correlationId = UUID.randomUUID().toString();
+        }
+    }
 }

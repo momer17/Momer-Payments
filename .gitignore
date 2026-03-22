@@ -79,4 +79,4 @@ hs_err_pid*
 application-*.properties
 application-*.yml
 !application.properties
-!application.yml
+!application.ymlCLAUDE.md

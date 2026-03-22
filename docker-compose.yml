@@ -11,6 +11,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - payment_network
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -21,6 +23,72 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - payment_network
+
+  # Payment Service
+  payment-service:
+    build:
+      context: ./momer-payments-service
+    container_name: payment_service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/payment_db
+      SPRING_DATASOURCE_USERNAME: payment_user
+      SPRING_DATASOURCE_PASSWORD: payment_pass
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_USERNAME: payment_user
+      SPRING_RABBITMQ_PASSWORD: payment_pass
+    networks:
+      - payment_network
+
+  # VOP Service
+  vop-service:
+    build:
+      context: ./momer-payments-vop
+    container_name: vop_service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/payment_db
+      SPRING_DATASOURCE_USERNAME: payment_user
+      SPRING_DATASOURCE_PASSWORD: payment_pass
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_USERNAME: payment_user
+      SPRING_RABBITMQ_PASSWORD: payment_pass
+    networks:
+      - payment_network
+
+  # Orchestrator Service
+  orchestrator-service:
+    build:
+      context: ./momer-payments-orchestrator
+    container_name: orchestrator_service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/payment_db
+      SPRING_DATASOURCE_USERNAME: payment_user
+      SPRING_DATASOURCE_PASSWORD: payment_pass
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_USERNAME: payment_user
+      SPRING_RABBITMQ_PASSWORD: payment_pass
+    networks:
+      - payment_network
+
+networks:
+  payment_network:
+    driver: bridge
 
 volumes:
   postgres_data:

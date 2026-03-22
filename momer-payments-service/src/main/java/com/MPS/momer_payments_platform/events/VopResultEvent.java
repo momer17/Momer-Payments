@@ -1,13 +1,12 @@
-package com.MPS.momer_payments_vop.events;
+package com.MPS.momer_payments_platform.events;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
-public record VopResponseEvent(
+public record VopResultEvent(
+        String correlationId,
         String requestedName,
         String actualName,
         String MatchResult,
-        String correlationId,
         Double confidenceScore,
         Instant verifiedAt
 ) {}

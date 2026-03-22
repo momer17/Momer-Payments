@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE verification_record (
+CREATE TABLE  IF NOT EXISTS verification_record (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     sender_account_number   VARCHAR(255) NOT NULL,
     sender_sort_code        VARCHAR(255) NOT NULL,
@@ -13,11 +13,5 @@ CREATE TABLE verification_record (
     verified_at             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_verification_record_sender_account_number
-    ON verification_record (sender_account_number);
-
-CREATE INDEX idx_verification_record_sender_account_number
-    ON verification_record (receiver_account_number);
-
-CREATE INDEX idx_verification_record_created_at
+CREATE INDEX IF NOT EXISTS idx_verification_record_created_at
     ON verification_record (verified_at);

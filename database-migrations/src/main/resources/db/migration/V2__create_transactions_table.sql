@@ -23,17 +23,17 @@ CREATE TABLE transactions (
 );
 
 
-CREATE UNIQUE INDEX idx_transactions_payment_reference
+CREATE UNIQUE INDEX IF NOT EXISTS idx_transactions_payment_reference
     ON transactions(payment_reference_number);
 
-CREATE INDEX idx_transactions_sender_account_id
+CREATE INDEX IF NOT EXISTS idx_transactions_sender_account_id
     ON transactions(sender_account_id);
 
-CREATE INDEX idx_transactions_receiver_account_id
+CREATE INDEX IF NOT EXISTS idx_transactions_receiver_account_id
     ON transactions(receiver_account_id);
 
-CREATE INDEX idx_transactions_status
+CREATE INDEX IF NOT EXISTS idx_transactions_status
     ON transactions(transaction_status);
 
-CREATE INDEX idx_transactions_sender_status
+CREATE INDEX IF NOT EXISTS idx_transactions_sender_status
     ON transactions(sender_account_id, transaction_status);
